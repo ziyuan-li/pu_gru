@@ -1,0 +1,31 @@
+{
+  "epochs": 3000,
+  "batch_size": 64,
+  "learning_rate": 0.001,
+  "optimizer": "RAdam",
+  "scheduler": {"name": "StepLR", "step_size": 500, "gamma": 0.5},
+  "gradient_clip_norm": 1.0,
+  "main_mass": {
+    "tasks": ["mass_i", "mass_ii"],
+    "split_seeds": [1, 2, 3],
+    "training_seeds": [3, 4, 5],
+    "models": ["cv_mi_pu_gru", "cv_am_pu_gru", "real_gru", "cv_gru", "real_mi_pu_gru", "real_am_pu_gru", "cv_pu_gru", "cv_mi_gru", "cv_am_gru"]
+  },
+  "additional_mass": {
+    "tasks": ["mass_i", "mass_ii"],
+    "split_seeds": [1, 2, 3],
+    "training_seeds": [3, 4, 5],
+    "models": ["mlp", "cv_mi_tanh", "cv_am_tanh", "cv_mi_silu", "cv_am_silu"]
+  },
+  "radius": {
+    "tasks": ["radius"],
+    "split_seeds": [0],
+    "training_seeds": [0, 1, 2, 3, 4],
+    "models": ["cv_mi_pu_gru", "cv_am_pu_gru", "real_gru", "cv_gru", "mlp", "real_mi_pu_gru", "real_am_pu_gru", "cv_pu_gru", "cv_mi_gru", "cv_am_gru", "cv_mi_tanh", "cv_am_tanh", "cv_mi_silu", "cv_am_silu"]
+  },
+  "tasks": {
+    "mass_i": {"split_fractions": [0.7, 0.15, 0.15], "split_roles": ["train", "val", "test_interp"], "selection": "minimum_validation_mse", "prior": "ws4", "target_unit": "keV", "metric_unit": "MeV", "output_factor": 0.001},
+    "mass_ii": {"split_fractions": [0.95, 0.05], "split_roles": ["train", "test_interp", "test_temporal"], "selection": "final_epoch", "prior": "ws4", "reference_year_max": 2016, "target_unit": "keV", "metric_unit": "MeV", "output_factor": 0.001},
+    "radius": {"split_fractions": [0.7, 0.15, 0.15], "split_roles": ["train", "val", "test_interp"], "selection": "minimum_validation_mse", "prior": "ws_star", "target_unit": "fm", "metric_unit": "fm", "output_factor": 1.0}
+  }
+}
